@@ -6,6 +6,9 @@ val graphQLVersion: String by project
 plugins {
     kotlin("jvm") version "1.8.22"
     id("io.ktor.plugin") version "2.3.2"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.22"
+    id("com.expediagroup.graphql") version "6.5.3"
+
     application
 }
 
