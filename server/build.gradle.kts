@@ -1,3 +1,5 @@
+import com.expediagroup.graphql.plugin.gradle.graphql
+
 val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
@@ -48,4 +50,10 @@ repositories {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+graphql { 
+    schema {
+        packages = listOf("server") 
+    }
 }
