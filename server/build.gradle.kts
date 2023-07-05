@@ -1,6 +1,7 @@
 val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
+val graphQLVersion: String by project
 
 plugins {
     kotlin("jvm") version "1.8.22"
@@ -32,6 +33,10 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+
+    implementation("com.expediagroup", "graphql-kotlin-server", graphQLVersion)
+    implementation("com.expediagroup", "graphql-kotlin-ktor-server", "7.0.0-alpha.6")
+
 }
 
 repositories {
