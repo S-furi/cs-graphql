@@ -27,12 +27,10 @@ java {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+    kotlinOptions { jvmTarget = "17" }
 }
 
-dependencies { 
+dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
@@ -41,19 +39,10 @@ dependencies {
 
     implementation("com.expediagroup", "graphql-kotlin-server", graphQLVersion)
     implementation("com.expediagroup", "graphql-kotlin-ktor-server", "7.0.0-alpha.6")
-
 }
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
+tasks.withType<Test> { useJUnitPlatform() }
 
-graphql { 
-    schema {
-        packages = listOf("server") 
-    }
-}
+graphql { schema { packages = listOf("server") } }
