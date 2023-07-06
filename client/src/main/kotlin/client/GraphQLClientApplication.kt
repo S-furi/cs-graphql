@@ -41,7 +41,7 @@ fun main() {
         println("Got query:\n ${bookQuery.query}\n, With variables: ${bookQuery.variables}\n")
         val queryResult = client.execute(bookQuery)
         queryResult.data?.searchBooks?.let { books ->
-            books.filterNotNull().forEach { it.title }
+            books.filterNotNull().map { it.title }.forEach(::println)
         }
     }
 
