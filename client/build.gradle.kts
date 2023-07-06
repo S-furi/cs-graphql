@@ -45,7 +45,7 @@ dependencies {
 
     implementation("com.expediagroup", "graphql-kotlin-client", graphQLVersion)
     implementation("com.expediagroup", "graphql-kotlin-ktor-client", "7.0.0-alpha.6")
-    implementation("com.expediagroup:graphql-kotlin-spring-client:$graphQLVersion")
+    implementation("com.expediagroup","graphql-kotlin-spring-client", graphQLVersion)
 }
 
 tasks.withType<Test> { useJUnitPlatform() }
