@@ -40,7 +40,9 @@ fun main() {
         val bookQuery = SimpleBookQuery(variables = SimpleBookQuery.Variables(listOf(1, 2, 3)))
         println("Got query:\n ${bookQuery.query}\n, With variables: ${bookQuery.variables}\n")
         val queryResult = client.execute(bookQuery)
-        queryResult.data?.searchBooks?.forEach(System.out::println)
+        queryResult.data?.searchBooks?.let { books ->
+            books.filterNotNull().forEach { it.title }
+        }
     }
 
     client.close()
