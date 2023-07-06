@@ -1,6 +1,7 @@
 package client
 
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
+import com.expediagroup.graphql.client.serialization.GraphQLClientKotlinxSerializer
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.logging.DEFAULT
@@ -29,13 +30,18 @@ fun main() {
                 }
             }
 
-    val client =
-            GraphQLKtorClient(url = URL("http://localhost:8080/graphql"), httpClient = httpClient)
+    val client = GraphQLKtorClient(
+            url = URL("http://localhost:8080/graphql"),
+            httpClient = httpClient,
+            serializer = GraphQLClientKotlinxSerializer())
 
-    println("Simlpe hello book example")
+    println("Simple hello book example")
     runBlocking {
-        val bookQuery = SimpleBookQuery()
+        val bookQuery = SimpleBookQuery(variables = SimpleBookQuery.Variables(listOf(1, 2, 3)))
+        println("Got query:\n ${bookQuery.query}\n, With variables: ${bookQuery.variables}\n")
         val queryResult = client.execute(bookQuery)
         queryResult.data?.searchBooks?.forEach(System.out::println)
     }
+
+    client.close()
 }
