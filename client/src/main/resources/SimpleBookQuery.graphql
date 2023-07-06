@@ -1,0 +1,5 @@
+query SimpleBookQuery {
+  searchBooks(params: { ids: [1] }) {
+    title
+  }
+}
