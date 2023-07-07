@@ -3,7 +3,7 @@
 ## Libs
 
 - [GraphQL-Kotlin](https://github.com/ExpediaGroup/graphql-kotlin)
-- Spring or Ktor for the web Server
+- Spring or [Ktor](https://github.com/ktorio/ktor) for the web Server
 
 ### Ktor Version
 Simple client/server architecture where the schema is defined through a series
