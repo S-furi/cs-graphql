@@ -37,7 +37,7 @@ class DefaultGraphQLClient(val host: String = "localhost", val port: Int = 8080)
                 }
             }
 
-    suspend fun <T : Any> execute(request: GraphQLClientRequest<T>) = runBlocking {
+    fun <T : Any> execute(request: GraphQLClientRequest<T>) = runBlocking {
         ktorClient.execute(request)
     }
 
