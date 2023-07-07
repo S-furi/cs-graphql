@@ -1,4 +1,4 @@
-query SimpleBookQuery($ids: [Int!]!) {
+query BookQuery($ids: [Int!]!) {
   searchBooks(params: { ids: $ids }) {
     title
   }

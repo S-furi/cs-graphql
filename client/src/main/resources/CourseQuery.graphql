@@ -1,0 +1,11 @@
+query CourseQuery($ids: [Int!]!) {
+  searchCourses(params: { ids: $ids } ) {
+    name
+    books {
+      title
+    }
+    university {
+      name
+    }
+  }
+}
