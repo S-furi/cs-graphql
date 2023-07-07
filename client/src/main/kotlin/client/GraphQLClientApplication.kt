@@ -14,6 +14,8 @@ import kotlinx.coroutines.runBlocking
 
 import generated.SimpleBookQuery
 
+val logger = Logger.DEFAULT
+
 fun main() {
     val httpClient =
             HttpClient(engineFactory = OkHttp) {
@@ -25,7 +27,7 @@ fun main() {
                     }
                 }
                 install(Logging) {
-                    logger = Logger.DEFAULT
+                    logger = logger
                     level = LogLevel.HEADERS
                 }
             }
@@ -35,13 +37,14 @@ fun main() {
             httpClient = httpClient,
             serializer = GraphQLClientKotlinxSerializer())
 
-    println("Simple hello book example")
+    logger.log("Simple book retrieval example")
     runBlocking {
         val bookQuery = SimpleBookQuery(variables = SimpleBookQuery.Variables(listOf(1, 2, 3)))
-        println("Got query:\n ${bookQuery.query}\n, With variables: ${bookQuery.variables}\n")
+        logger.log("Got query:\n ${bookQuery.query}\n, With variables: ${bookQuery.variables}\n")
+
         val queryResult = client.execute(bookQuery)
         queryResult.data?.searchBooks?.let { books ->
-            books.filterNotNull().map { it.title }.forEach(::println)
+            books.filterNotNull().map { it.title }.forEach(logger::log)
         }
     }
 
