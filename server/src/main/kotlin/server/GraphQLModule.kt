@@ -14,6 +14,7 @@ import com.expediagroup.graphql.dataloader.KotlinDataLoaderRegistryFactory
 import server.schema.queries.BookQueryService
 import server.schema.queries.CourseQueryService
 import server.schema.queries.UniversityQueryService
+import server.schema.queries.SimpleMutation
 import server.schema.dataloaders.UniversityDataLoader
 import server.schema.dataloaders.CourseDataLoader
 import server.schema.dataloaders.BookDataLoader
@@ -43,7 +44,7 @@ fun Application.graphQLModule() {
                 CourseQueryService(),
                 UniversityQueryService(),
             )
-            mutations = emptyList()
+            mutations = listOf(SimpleMutation())
             subscriptions = emptyList()
         }
         engine {
