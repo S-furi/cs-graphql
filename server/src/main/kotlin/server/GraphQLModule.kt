@@ -16,6 +16,7 @@ import server.schema.queries.CourseQueryService
 import server.schema.queries.UniversityQueryService
 import server.schema.queries.DataAndErrorsQuery
 import server.schema.queries.SimpleMutation
+import server.schema.queries.SimpleSubscription
 import server.schema.dataloaders.UniversityDataLoader
 import server.schema.dataloaders.CourseDataLoader
 import server.schema.dataloaders.BookDataLoader
@@ -47,7 +48,7 @@ fun Application.graphQLModule() {
                 DataAndErrorsQuery(),
             )
             mutations = listOf(SimpleMutation())
-            subscriptions = emptyList()
+            subscriptions = listOf(SimpleSubscription())
         }
         engine {
             dataLoaderRegistryFactory = KotlinDataLoaderRegistryFactory(
