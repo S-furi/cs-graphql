@@ -30,7 +30,7 @@ package we are sending.
 
 
 ### Server
-Read (server instructions)[./server/README.md] for building and running the server.
+Read [server instructions](./server/README.md) for building and running the server.
 
 ### Client
 

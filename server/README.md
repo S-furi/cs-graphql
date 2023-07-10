@@ -17,6 +17,6 @@ before running.
 
 ### Playground
 Once the server is up and running, you can visit
-(GraphiQLPlayground)[http://localhost:8080/graphiql] to fetch the schema, and
+[GraphiQLPlayground](http://localhost:8080/graphiql) to fetch the schema, and
 test queries/mutation/subscriptions offered by the server.
 
