@@ -5,7 +5,7 @@
 - [GraphQL-Kotlin](https://github.com/ExpediaGroup/graphql-kotlin)
 - Spring or [Ktor](https://github.com/ktorio/ktor) for the web Server
 
-### Ktor Version
+## Ktor Version
 Simple client/server architecture where the schema is defined through a series
 of classes (or kotlin data classes) exposing methods for fetching data given a
 series of `ids` (method `search`).
@@ -29,8 +29,12 @@ hood, the correct payload is created for letting the server understand the
 package we are sending.
 
 
-#### Client
-Queries works correcty, but subscription does not seem to work. A test with
+### Server
+Read (server instructions)[./server/README.md] for building and running the server.
+
+### Client
+
+*Notes*: Queries works correcty, but subscription does not seem to work. A test with
 [Apollo Kotlin](https://github.com/apollographql/apollo-kotlin) will be made,
 and this will also lead to the discovery of Apollo that claims to simplify
 GraphQL Client.
