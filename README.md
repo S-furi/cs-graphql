@@ -27,3 +27,10 @@ main reason why we are using graphql-koltin and ktor - they provide a great
 support for coroutines) creating a simple HTTP POST request, where under the
 hood, the correct payload is created for letting the server understand the
 package we are sending.
+
+
+#### Client
+Queries works correcty, but subscription does not seem to work. A test with
+[Apollo Kotlin](https://github.com/apollographql/apollo-kotlin) will be made,
+and this will also lead to the discovery of Apollo that claims to simplify
+GraphQL Client.
