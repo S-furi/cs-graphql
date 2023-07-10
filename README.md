@@ -33,6 +33,7 @@ package we are sending.
 Read [server instructions](./server/README.md) for building and running the server.
 
 ### Client
+Read [client instructions](./client/README.md) for building and running the client.
 
 *Notes*: Queries works correcty, but subscription does not seem to work. A test with
 [Apollo Kotlin](https://github.com/apollographql/apollo-kotlin) will be made,
