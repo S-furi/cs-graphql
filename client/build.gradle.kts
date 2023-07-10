@@ -54,6 +54,6 @@ graphql {
     client {
         packageName = "generated"
         sdlEndpoint = "http://localhost:8080/sdl"
-        serializer = GraphQLSerializer.KOTLINX
+        serializer = GraphQLSerializer.KOTLINX // build plugin default is Jackson
     }
 }
