@@ -1,0 +1,4 @@
+subscription counterSubscription($limit: Int) {
+  counter(limit: $limit)
+}
+
