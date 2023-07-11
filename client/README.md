@@ -20,3 +20,6 @@ And the tests contained in
 [GraphQLClientApplication](./src/main/kotlin/client/GraphQLClientApplication.kt)
 are executed.
 
+## Important Notes
+This opened issue may suggest that subscriptions are still not supported:
+https://github.com/ExpediaGroup/graphql-kotlin/issues/701
