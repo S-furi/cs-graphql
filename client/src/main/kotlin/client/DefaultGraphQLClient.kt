@@ -1,3 +1,4 @@
+import com.expediagroup.graphql.client.jackson.GraphQLClientJacksonSerializer
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import com.expediagroup.graphql.client.types.GraphQLClientRequest
 import generated.*
@@ -7,17 +8,22 @@ import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.WebSockets
 import java.net.URL
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.runBlocking
-
 
 class DefaultGraphQLClient(val host: String = "localhost", val port: Int = 8080) {
     private val ktorClient: GraphQLKtorClient
     val logger = Logger.DEFAULT
 
     init {
-        ktorClient = GraphQLKtorClient(url = getUrl(), httpClient = getDefaultHttpClient())
+        ktorClient =
+                GraphQLKtorClient(
+                        url = getUrl(),
+                        httpClient = getDefaultHttpClient(),
+                        serializer = GraphQLClientJacksonSerializer()
+                )
     }
 
     fun getUrl(): URL = URL("http://$host:$port/graphql")
@@ -35,6 +41,8 @@ class DefaultGraphQLClient(val host: String = "localhost", val port: Int = 8080)
                     logger = logger
                     level = LogLevel.HEADERS
                 }
+
+                install(WebSockets) { maxFrameSize = Long.MAX_VALUE }
             }
 
     fun <T : Any> execute(request: GraphQLClientRequest<T>) = runBlocking {
