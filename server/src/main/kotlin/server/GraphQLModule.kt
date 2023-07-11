@@ -27,6 +27,9 @@ import com.expediagroup.graphql.server.ktor.graphQLPostRoute
 import com.expediagroup.graphql.server.ktor.graphQLSubscriptionsRoute
 import com.expediagroup.graphql.server.ktor.graphiQLRoute
 import com.expediagroup.graphql.server.ktor.graphQLSDLRoute
+import com.expediagroup.graphql.server.ktor.KtorGraphQLRequestParser
+import com.expediagroup.graphql.generator.hooks.FlowSubscriptionSchemaGeneratorHooks
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 fun Application.graphQLModule() {
     install(WebSockets) {
@@ -49,8 +52,10 @@ fun Application.graphQLModule() {
             )
             mutations = listOf(SimpleMutation())
             subscriptions = listOf(SimpleSubscription())
+            hooks = FlowSubscriptionSchemaGeneratorHooks()
         }
         engine {
+            automaticPersistedQueries { enabled = true }
             dataLoaderRegistryFactory = KotlinDataLoaderRegistryFactory(
                 UniversityDataLoader, CourseDataLoader, BookDataLoader
             )
@@ -67,5 +72,6 @@ fun Application.graphQLModule() {
         graphiQLRoute()
         graphQLSDLRoute()
     }
+
 }
 
