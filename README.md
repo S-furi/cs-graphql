@@ -39,3 +39,6 @@ Read [client instructions](./client/README.md) for building and running the clie
 [Apollo Kotlin](https://github.com/apollographql/apollo-kotlin) will be made,
 and this will also lead to the discovery of Apollo that claims to simplify
 GraphQL Client.
+
+This opened issue may suggest that subscriptions are still not supported:
+https://github.com/ExpediaGroup/graphql-kotlin/issues/701
