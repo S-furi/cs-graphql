@@ -32,23 +32,3 @@ fun main() {
 
     subClient.close()
 }
-
-fun printSubscriptionDetails(data: ApolloResponse<CounterSubscription.Data>): Unit {
-    println(
-            """
-    Errors: ${data.errors}
-
-    Data: ${data.data}
-
-    IsLast: ${data.isLast}
-
-    Exception: ${data.exception}
-
-    Operation: ${data.operation}
-
-    Exec. Content: ${data.executionContext}
-
-    RequestUuid: ${data.requestUuid}
-    """
-    )
-}
