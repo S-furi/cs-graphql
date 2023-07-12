@@ -36,3 +36,10 @@ queries and mutations but also subscriptions.
 #### Instructions
 Read [client instructions](./apollo-client/README.md) for building and running
 the client.
+
+---
+## Future Developements
+- Explore Apollo Kotlin **caching** mechanisms and evaluate a self implementation
+  using an in-memory DB like Redis.
+- Attaching a database
+    - Building a docker architecture for DB and Server (<--gradle tasks).
