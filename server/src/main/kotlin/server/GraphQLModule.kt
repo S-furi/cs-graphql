@@ -1,35 +1,29 @@
 package server
 
-import io.ktor.server.application.Application
-import io.ktor.server.websocket.WebSockets
+import com.expediagroup.graphql.dataloader.KotlinDataLoaderRegistryFactory
+import com.expediagroup.graphql.generator.hooks.FlowSubscriptionSchemaGeneratorHooks
+import com.expediagroup.graphql.server.ktor.DefaultKtorGraphQLContextFactory
+import com.expediagroup.graphql.server.ktor.GraphQL
+import com.expediagroup.graphql.server.ktor.graphQLGetRoute
+import com.expediagroup.graphql.server.ktor.graphQLPostRoute
+import com.expediagroup.graphql.server.ktor.graphQLSDLRoute
+import com.expediagroup.graphql.server.ktor.graphQLSubscriptionsRoute
+import com.expediagroup.graphql.server.ktor.graphiQLRoute
 import io.ktor.serialization.jackson.JacksonWebsocketContentConverter
+import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.routing.Routing
-
-import java.time.Duration
-import com.expediagroup.graphql.server.ktor.GraphQL
-import com.expediagroup.graphql.server.ktor.DefaultKtorGraphQLContextFactory
-import com.expediagroup.graphql.dataloader.KotlinDataLoaderRegistryFactory
+import io.ktor.server.websocket.WebSockets
+import server.schema.dataloaders.BookDataLoader
+import server.schema.dataloaders.CourseDataLoader
+import server.schema.dataloaders.UniversityDataLoader
 import server.schema.queries.BookQueryService
 import server.schema.queries.CourseQueryService
-import server.schema.queries.UniversityQueryService
 import server.schema.queries.DataAndErrorsQuery
 import server.schema.queries.SimpleMutation
 import server.schema.queries.SimpleSubscription
-import server.schema.dataloaders.UniversityDataLoader
-import server.schema.dataloaders.CourseDataLoader
-import server.schema.dataloaders.BookDataLoader
-
-
-import com.expediagroup.graphql.server.ktor.graphQLGetRoute
-import com.expediagroup.graphql.server.ktor.graphQLPostRoute
-import com.expediagroup.graphql.server.ktor.graphQLSubscriptionsRoute
-import com.expediagroup.graphql.server.ktor.graphiQLRoute
-import com.expediagroup.graphql.server.ktor.graphQLSDLRoute
-import com.expediagroup.graphql.server.ktor.KtorGraphQLRequestParser
-import com.expediagroup.graphql.generator.hooks.FlowSubscriptionSchemaGeneratorHooks
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import server.schema.queries.UniversityQueryService
 
 fun Application.graphQLModule() {
     install(WebSockets) {
@@ -44,25 +38,27 @@ fun Application.graphQLModule() {
     install(GraphQL) {
         schema {
             packages = listOf("server")
-            queries = listOf(
-                BookQueryService(),
-                CourseQueryService(),
-                UniversityQueryService(),
-                DataAndErrorsQuery(),
-            )
+            queries =
+                    listOf(
+                            BookQueryService(),
+                            CourseQueryService(),
+                            UniversityQueryService(),
+                            DataAndErrorsQuery(),
+                    )
             mutations = listOf(SimpleMutation())
             subscriptions = listOf(SimpleSubscription())
             hooks = FlowSubscriptionSchemaGeneratorHooks()
         }
         engine {
             automaticPersistedQueries { enabled = true }
-            dataLoaderRegistryFactory = KotlinDataLoaderRegistryFactory(
-                UniversityDataLoader, CourseDataLoader, BookDataLoader
-            )
+            dataLoaderRegistryFactory =
+                    KotlinDataLoaderRegistryFactory(
+                            UniversityDataLoader,
+                            CourseDataLoader,
+                            BookDataLoader
+                    )
         }
-        server {
-            contextFactory = DefaultKtorGraphQLContextFactory()
-        }
+        server { contextFactory = DefaultKtorGraphQLContextFactory() }
     }
 
     install(Routing) {
@@ -72,6 +68,4 @@ fun Application.graphQLModule() {
         graphiQLRoute()
         graphQLSDLRoute()
     }
-
 }
-
