@@ -23,7 +23,7 @@ class SimpleSubscription : Subscription {
         val threshold = if (limit != null) limit else Int.MAX_VALUE
 
         for (i in 0..threshold) {
-            emit(Random.nextInt())
+            emit(i)
             delay(1000)
         }
     }
