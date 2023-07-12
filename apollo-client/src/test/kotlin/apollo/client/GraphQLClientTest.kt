@@ -13,6 +13,10 @@ class GraphQLClientTest {
     private val apolloClientBuilder =
         ApolloClient.Builder().serverUrl(graphQLEndpoint)
     
+    private class ServerNotRunningException(
+        message: String = "Server must be up and running"
+    ): Exception(message)
+
     @Test
     fun testSimpleBookQuery() {
         val expectedTitle = "Campbell Biology"
@@ -21,7 +25,7 @@ class GraphQLClientTest {
         
         runBlocking {
             val received = client.query(GetBooksQuery(listOf(1))).execute()
-            .data?.searchBooks?.get(0)?.title ?: throw IllegalStateException()
+            .data?.searchBooks?.get(0)?.title ?: throw ServerNotRunningException()
 
             assertTrue(received == expectedTitle)
         }
