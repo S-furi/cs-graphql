@@ -1,44 +1,38 @@
 # Client-Server GraphQL Architecture
 
-## Libs
-
-- [GraphQL-Kotlin](https://github.com/ExpediaGroup/graphql-kotlin)
-- Spring or [Ktor](https://github.com/ktorio/ktor) for the web Server
-
-## Ktor Version
-Simple client/server architecture where the schema is defined through a series
-of classes (or kotlin data classes) exposing methods for fetching data given a
-series of `ids` (method `search`).
-Every model object needs to define a `DataLoader` for retrieving data.
-At last, a GraphQL Server needs a `Context` object (in the exaple we use the
-default context), which is responsable of parsing, query the correct data
-loader and retrieving data given a client query through HTTP POST method.
-
-Server side, a bunch of simple APIs are being provided, which once the server
-is up and running, is possibile to see and to query visiting
-http://localhost:8080/graphiql. This gui is a playground where it's possibile
-to test the queries provided by the server.
-
-Client side, things are made simple thanks to the GraphQL-Kotlin gradle plugin,
-which auto generates the schema for the queries once they're declared in a
-"*.graphql" query file under `/resources/` folder. Now thanks to Ktor and
-OkHTTP, we can query the server (using also kotlin coroutines) (<- that is the
-main reason why we are using graphql-koltin and ktor - they provide a great
-support for coroutines) creating a simple HTTP POST request, where under the
-hood, the correct payload is created for letting the server understand the
-package we are sending.
-
+A simple project illustrating how it's possibile to create a Ktor Web Server
+that provides GraphQL APIs over HTTP (POST), and an Apollo Client that can
+perform queries, mutations and subscriptions over the GraphQL server.
 
 ### Server
+[Ktor](https://github.com/ktorio/ktor) has been used to build the Web Server.
+This leads to a lighter (compared to Spring) and simpler implementation of the
+GraphQL server.
+Thanks to [GraphQL Kotlin](https://github.com/ExpediaGroup/graphql-kotlin)
+building and setting up routes to the GraphQL endpoint is made easy.
+
+For each element of the schema, we must build the model class (hopefully a data
+class), a data loader, for defining data fetching strategies, and the
+operations (queries, mutations or subscriptions) on top of them.
+
+Every dataloader and operation must be included during the server's setup.
+
+#### Instructions
 Read [server instructions](./server/README.md) for building and running the server.
 
 ### Client
-Read [client instructions](./client/README.md) for building and running the client.
+Being *subscriptions* not already supported by GraphQL Kotlin, 
+[Apollo GraphQL](https://github.com/apollographql/apollo-kotlin) has been used,
+providing an even simpler way to handle GraphQL client side requests.
 
-*Notes*: Queries works correcty, but subscription does not seem to work. A test with
-[Apollo Kotlin](https://github.com/apollographql/apollo-kotlin) will be made,
-and this will also lead to the discovery of Apollo that claims to simplify
-GraphQL Client.
+This library provides a gradle plugin that auto-generate all the schema classes
+and informations for providing, at compile time, static typing safety.
 
-This opened issue may suggest that subscriptions are still not supported:
-https://github.com/ExpediaGroup/graphql-kotlin/issues/701
+Once the schema is downloaded, and the gradle project is built, all the needed
+classes for quering the server will be generated inside the `build/generated`
+gradle folder. At this point, it's possibile to query the Server for both
+queries and mutations but also subscriptions.
+
+#### Instructions
+Read [client instructions](./apollo-client/README.md) for building and running
+the client.
