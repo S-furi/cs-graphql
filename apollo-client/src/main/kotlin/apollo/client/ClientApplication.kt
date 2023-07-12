@@ -9,19 +9,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 private val webSocketURL = "ws://localhost:8080/subscriptions"
 private val graphQLEndpoint = "http://localhost:8080/graphql"
 
-fun getHttpClient(): OkHttpClient =
-        OkHttpClient.Builder()
-                .addInterceptor(
-                        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-                )
-                .build()
-
 fun main() {
 
     val subClient =
             GraphQLClient.Builder()
                     .serverUrl(graphQLEndpoint)
-                    .addSubscriptionModule(webSocketURL, getHttpClient())
+                    .addHttpWithInterceptor()
+                    .addSubscriptionModule(webSocketURL)
                     .build()
                     .client
 

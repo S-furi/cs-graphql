@@ -60,7 +60,9 @@ class GraphQLClientTest {
 
     @Test
     fun testSimpleSubscription() {
-        val client = clientBuilder.addSubscriptionModule(webSocketEndpoint).build().client
+        val client = clientBuilder
+            .addHttpWithInterceptor()
+            .addSubscriptionModule(webSocketEndpoint).build().client
 
         runBlocking {
             val received =
