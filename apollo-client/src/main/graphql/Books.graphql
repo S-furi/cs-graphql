@@ -1,0 +1,5 @@
+query getBooks($ids: [Int!]!) {
+  searchBooks(params: { ids: $ids} ) {
+    title
+  }
+}
