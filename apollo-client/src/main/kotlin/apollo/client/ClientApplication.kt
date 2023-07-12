@@ -1,59 +1,51 @@
 package apollo.client
 
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.network.ws.WebSocketNetworkTransport
-import com.apollographql.apollo3.network.http.HttpNetworkTransport
-import com.apollographql.apollo3.network.http.ApolloClientAwarenessInterceptor
-
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.delay
-
-import com.apollographql.apollo3.api.Optional
-import com.apollographql.apollo3.api.Builder
 import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.network.ws.GraphQLWsProtocol
-import com.apollographql.apollo3.network.okHttpClient
+import com.apollographql.apollo3.api.Builder
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+
+private val webSocketURL = "ws://localhost:8080/graphql"
+private val graphQLEndpoint = "http://localhost:8080/graphql"
+
+fun getHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+                .addInterceptor(
+                        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+                )
+                .build()
 
 fun main() {
-    val apolloClient = ApolloClient.Builder()
-        .serverUrl("http://localhost:8080/graphql")
-        .subscriptionNetworkTransport(
-            WebSocketNetworkTransport.Builder()
-                .protocol(GraphQLWsProtocol.Factory())
-                .serverUrl("ws://localhost:8080/graphql")
-                .build()
-        ).build()
 
-
+    val client = GraphQLClient.Builder().serverUrl(graphQLEndpoint).build().client
 
     // Simple Query test
     runBlocking {
-        apolloClient.query(CourseQuery(listOf(1, 2, 3)))
-            .execute()
-            .dataOrThrow()
-            .searchCourses.forEach(::println)
+        client.query(CourseQuery(listOf(1, 2, 3)))
+                .execute()
+                .dataOrThrow()
+                .searchCourses
+                .forEach(::println)
     }
 
     // Simple Mutation test
     runBlocking {
-        apolloClient.mutation(ListAddMutation("Hello"))
-            .execute()
-            .dataOrThrow()
-            .also(::println)
+        client.mutation(ListAddMutation("Hello")).execute().dataOrThrow().also(::println)
     }
 
     // Subscriptions test (not working)
     // runBlocking {
-    //     apolloClient.subscription(CounterSubscription(Optional.present(10))).toFlow()
+    //     client.subscription(CounterSubscription(Optional.present(10))).toFlow()
     //         .collect(::printSubscriptionDetails)
-    // }
+    // }}
 
-    apolloClient.close()
+    client.close()
 }
 
 fun printSubscriptionDetails(data: ApolloResponse<CounterSubscription.Data>): Unit {
-    println("""
+    println(
+            """
     Errors: ${data.errors}
 
     Data: ${data.data}
@@ -67,6 +59,6 @@ fun printSubscriptionDetails(data: ApolloResponse<CounterSubscription.Data>): Un
     Exec. Content: ${data.executionContext}
 
     RequestUuid: ${data.requestUuid}
-    """)
+    """
+    )
 }
-
