@@ -43,3 +43,4 @@ the client.
   using an in-memory DB like Redis.
 - Attaching a database
     - Building a docker architecture for DB and Server (<--gradle tasks).
+- Implement authorization and authentication.
