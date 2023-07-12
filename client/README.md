@@ -1,4 +1,7 @@
 # GraphQL Client
+This client is not being developed anymore in favor of
+[Apollo Kotlin](../apollo-client) client.
+
 ## Instruction
 ### Usage
 The first run requires that the server is running for downloading the schema.
