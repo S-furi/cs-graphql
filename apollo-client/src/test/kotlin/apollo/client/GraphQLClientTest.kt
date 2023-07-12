@@ -6,13 +6,18 @@ import org.junit.jupiter.api.BeforeAll
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
+import okhttp3.OkHttpClient
 
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.toList
+
+import apollo.client.GraphQLClient
 
 class GraphQLClientTest {
     private val graphQLEndpoint = "http://localhost:8080/graphql"
-    private val apolloClientBuilder =
-        ApolloClient.Builder().serverUrl(graphQLEndpoint)
+    private val webSocketEndpoint = "ws://localhost:8080/subscriptions"
+    private val clientBuilder =
+        GraphQLClient.Builder().serverUrl(graphQLEndpoint)
     
     private class ServerNotRunningException(
         message: String = "Server must be up and running"
@@ -53,5 +58,16 @@ class GraphQLClientTest {
         client.close()
     }
 
-    private fun getDefaultClient(): ApolloClient = apolloClientBuilder.build()
+    @Test
+    fun testSimpleSubscription() {
+        val client = clientBuilder.addSubscriptionModule(webSocketEndpoint).build().client
+
+        runBlocking {
+            val received  = client.subscription(CounterSubscription(Optional.present(2))).toFlow()
+                .toList().map { it.data?.counter }
+            assertEquals(List(3) { it }, received)
+        }
+    }
+
+    private fun getDefaultClient(): ApolloClient = clientBuilder.build().client
 }
