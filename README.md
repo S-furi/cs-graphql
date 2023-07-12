@@ -44,3 +44,4 @@ the client.
 - Attaching a database
     - Building a docker architecture for DB and Server (<--gradle tasks).
 - Implement authorization and authentication.
+- Performance evaluation against REST APIs
