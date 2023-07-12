@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
 
 import kotlinx.coroutines.runBlocking
 
@@ -25,10 +26,31 @@ class GraphQLClientTest {
         
         runBlocking {
             val received = client.query(GetBooksQuery(listOf(1))).execute()
-            .data?.searchBooks?.get(0)?.title ?: throw ServerNotRunningException()
+                .data?.searchBooks?.get(0)?.title ?: throw ServerNotRunningException()
 
             assertTrue(received == expectedTitle)
         }
+        
+        client.close()
+    }
+
+    @Test
+    fun testSimpleMutation() {
+        val client = getDefaultClient()
+
+        runBlocking {
+            var received = client.mutation(ListAddMutation("Hello")).execute()
+                .data?.addToList ?: throw ServerNotRunningException()
+
+            assertTrue(listOf("Hello").equals(received))
+
+            received = client.mutation(ListAddMutation("Word")).execute()
+                .data?.addToList ?: throw ServerNotRunningException()
+
+            assertEquals(listOf("Hello", "Word"), received, "Got $received")
+        }
+
+        client.close()
     }
 
     private fun getDefaultClient(): ApolloClient = apolloClientBuilder.build()
