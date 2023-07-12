@@ -21,5 +21,6 @@ And run the main application with:
 ```bash
 ./gradlew run
 ```
+
 *Note:* the server must be up and running while donwloading the schema and
 building the project.
