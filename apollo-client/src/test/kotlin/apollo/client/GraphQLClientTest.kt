@@ -16,62 +16,56 @@ class GraphQLClientTest {
             Exception(message)
 
     @Test
-    fun testSimpleBookQuery() {
+    fun testSimpleBookQuery() = runBlocking {
         val expectedTitle = "Campbell Biology"
 
         val client = getDefaultClient()
 
-        runBlocking {
-            val received =
-                    client.query(GetBooksQuery(listOf(1)))
-                            .execute()
-                            .data
-                            ?.searchBooks
-                            ?.get(0)
-                            ?.title
-                            ?: throw ServerNotRunningException()
+        val received =
+                client.query(GetBooksQuery(listOf(1))).execute().data?.searchBooks?.get(0)?.title
+                        ?: throw ServerNotRunningException()
 
-            assertTrue(received == expectedTitle)
-        }
+        assertTrue(received == expectedTitle)
 
         client.close()
     }
 
     @Test
-    fun testSimpleMutation() {
+    fun testSimpleMutation() = runBlocking {
         val client = getDefaultClient()
 
-        runBlocking {
-            var received =
-                    client.mutation(ListAddMutation("Hello")).execute().data?.addToList
-                            ?: throw ServerNotRunningException()
+        var received =
+                client.mutation(ListAddMutation("Hello")).execute().data?.addToList
+                        ?: throw ServerNotRunningException()
 
-            assertTrue(listOf("Hello").equals(received))
+        assertTrue(listOf("Hello").equals(received))
 
-            received =
-                    client.mutation(ListAddMutation("Word")).execute().data?.addToList
-                            ?: throw ServerNotRunningException()
+        received =
+                client.mutation(ListAddMutation("Word")).execute().data?.addToList
+                        ?: throw ServerNotRunningException()
 
-            assertEquals(listOf("Hello", "Word"), received, "Got $received")
-        }
+        assertEquals(listOf("Hello", "Word"), received, "Got $received")
 
         client.close()
     }
 
     @Test
-    fun testSimpleSubscription() {
-        val client = clientBuilder
-            .addHttpWithInterceptor()
-            .addSubscriptionModule(webSocketEndpoint).build().client
+    fun testSimpleSubscription() = runBlocking {
+        val client =
+                clientBuilder
+                        .addHttpWithInterceptor()
+                        .addSubscriptionModule(webSocketEndpoint)
+                        .build()
+                        .client
 
-        runBlocking {
-            val received =
-                    client.subscription(CounterSubscription(Optional.present(2)))
-                            .toFlow()
-                            .toList()
-                            .map { it.data?.counter }
-            assertEquals(List(3) { it }, received)
-        }
+        val received =
+                client.subscription(CounterSubscription(Optional.present(2)))
+                        .toFlow()
+                        .toList()
+                        .map { it.data?.counter }
+        assertEquals(List(3) { it }, received)
+
+        client.close()
     }
 
     private fun getDefaultClient(): ApolloClient = clientBuilder.build().client
