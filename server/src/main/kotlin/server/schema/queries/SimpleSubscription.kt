@@ -19,7 +19,7 @@ class SimpleSubscription : Subscription {
     fun multipleValue(): Flow<Int> = flowOf(1, 2, 3)
 
     @GraphQLDescription("Return a random number every second")
-    suspend fun counter(limit: Int? = null): Flow<Int> = flow {
+    fun counter(limit: Int? = null): Flow<Int> = flow {
         val threshold = if (limit != null) limit else Int.MAX_VALUE
 
         for (i in 0..threshold) {
