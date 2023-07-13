@@ -9,7 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 class GraphQLClient(val client: ApolloClient) {
 
-    private constructor(builder: Builder): this(builder.apolloClientBuilder.build())
+    private constructor(builder: Builder) : this(builder.apolloClientBuilder.build())
 
     class Builder() {
         val apolloClientBuilder: ApolloClient.Builder = ApolloClient.Builder()
@@ -18,34 +18,34 @@ class GraphQLClient(val client: ApolloClient) {
         fun serverUrl(serverUrl: String) = apply { apolloClientBuilder.serverUrl(serverUrl) }
 
         /**
-        *
-        * Adds WebSocket Network Transport for enabling subscriptions.
-        * 
-        * Note: subscriptions-transport-ws was deprecated in favor of graphql-ws
-        * protocol, but because of backward compatibility, Apollo by default 
-        * uses the deprecated protocol. In this implemention, we explicitly
-        * specify the correct version that is now being the HTTP standard.
-        */
-        fun addSubscriptionModule(webSocketEndpoint: String) =
-                apply {
-                    apolloClientBuilder.subscriptionNetworkTransport(
-                            WebSocketNetworkTransport.Builder()
-                                    .serverUrl(webSocketEndpoint)
-                                    // specifying the new graphql-ws protocol
-                                    .protocol(GraphQLWsProtocol.Factory())
-                                    .also { it.okHttpClient(okHttpClient ?: return this) }
-                                    .build()
-                    )
-                }
-
+         *
+         * Adds WebSocket Network Transport for enabling subscriptions.
+         *
+         * Note: subscriptions-transport-ws was deprecated in favor of graphql-ws protocol, but
+         * because of backward compatibility, Apollo by default uses the deprecated protocol. In
+         * this implemention, we explicitly specify the correct version that is now being the HTTP
+         * standard.
+         */
+        fun addSubscriptionModule(webSocketEndpoint: String) = apply {
+            apolloClientBuilder.subscriptionNetworkTransport(
+                    WebSocketNetworkTransport.Builder()
+                            .serverUrl(webSocketEndpoint)
+                            // specifying the new graphql-ws protocol
+                            .protocol(GraphQLWsProtocol.Factory())
+                            .also { it.okHttpClient(okHttpClient ?: return this) }
+                            .build()
+            )
+        }
 
         fun addHttpWithInterceptor() = apply {
-                okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(
-                        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-                )
-                .build()
-    }
+            okHttpClient =
+                    OkHttpClient.Builder()
+                            .addInterceptor(
+                                    HttpLoggingInterceptor()
+                                            .setLevel(HttpLoggingInterceptor.Level.BODY)
+                            )
+                            .build()
+        }
 
         fun build() = GraphQLClient(this)
     }
