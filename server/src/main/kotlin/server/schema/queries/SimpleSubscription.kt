@@ -20,9 +20,7 @@ class SimpleSubscription : Subscription {
 
     @GraphQLDescription("Return a random number every second")
     fun counter(limit: Int? = null): Flow<Int> = flow {
-        val threshold = if (limit != null) limit else Int.MAX_VALUE
-
-        for (i in 0..threshold) {
+        for (i in 0..(limit ?: Int.MAX_VALUE)) {
             emit(i)
             delay(1000)
         }
