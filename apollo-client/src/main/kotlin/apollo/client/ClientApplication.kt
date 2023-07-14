@@ -2,6 +2,7 @@ package apollo.client
 
 import com.apollographql.apollo3.api.Builder
 import com.apollographql.apollo3.api.Optional
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 
 private val webSocketURL = "ws://localhost:8080/subscriptions"
@@ -16,9 +17,11 @@ fun main() = runBlocking {
                     .build()
                     .client
 
-    subClient.subscription(CounterSubscription(Optional.present(5))).toFlow().collect {
-        println("Received: ${it.data?.counter} from server")
-    }
+    subClient
+            .subscription(CounterSubscription(Optional.present(5)))
+            .toFlow()
+            .onCompletion { println("Communication completed succesfully!") }
+            .collect { println("Received: ${it.data?.counter} from server") }
 
     subClient.close()
 }
