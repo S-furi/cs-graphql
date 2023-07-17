@@ -13,7 +13,7 @@ class GraphQLClientTest {
     private val clientBuilder = GraphQLClient.Builder().serverUrl(graphQLEndpoint)
 
     private class ServerNotRunningException(message: String = "Server must be up and running") :
-            Exception(message)
+        Exception(message)
 
     @Test
     fun testSimpleBookQuery() = runBlocking {
@@ -22,8 +22,8 @@ class GraphQLClientTest {
         val client = getDefaultClient()
 
         val received =
-                client.query(GetBooksQuery(listOf(1))).execute().data?.searchBooks?.get(0)?.title
-                        ?: throw ServerNotRunningException()
+            client.query(GetBooksQuery(listOf(1))).execute().data?.searchBooks?.get(0)?.title
+                ?: throw ServerNotRunningException()
 
         assertTrue(received == expectedTitle)
 
@@ -35,14 +35,14 @@ class GraphQLClientTest {
         val client = getDefaultClient()
 
         var received =
-                client.mutation(ListAddMutation("Hello")).execute().data?.addToList
-                        ?: throw ServerNotRunningException()
+            client.mutation(ListAddMutation("Hello")).execute().data?.addToList
+                ?: throw ServerNotRunningException()
 
-        assertTrue(listOf("Hello").equals(received))
+        assertTrue(listOf("Hello") == received)
 
         received =
-                client.mutation(ListAddMutation("Word")).execute().data?.addToList
-                        ?: throw ServerNotRunningException()
+            client.mutation(ListAddMutation("Word")).execute().data?.addToList
+                ?: throw ServerNotRunningException()
 
         assertEquals(listOf("Hello", "Word"), received, "Got $received")
 
@@ -52,17 +52,17 @@ class GraphQLClientTest {
     @Test
     fun testSimpleSubscription() = runBlocking {
         val client =
-                clientBuilder
-                        .addHttpWithInterceptor()
-                        .addSubscriptionModule(webSocketEndpoint)
-                        .build()
-                        .client
+            clientBuilder
+                .addHttpWithInterceptor()
+                .addSubscriptionModule(webSocketEndpoint)
+                .build()
+                .client
 
         val received =
-                client.subscription(CounterSubscription(Optional.present(2)))
-                        .toFlow()
-                        .toList()
-                        .map { it.data?.counter }
+            client.subscription(CounterSubscription(Optional.present(2)))
+                .toFlow()
+                .toList()
+                .map { it.data?.counter }
         assertEquals(List(3) { it }, received)
 
         client.close()
