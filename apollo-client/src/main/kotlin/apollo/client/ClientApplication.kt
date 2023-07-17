@@ -22,7 +22,7 @@ fun main() = runBlocking {
 
     res.forEach {
         print("Title: ${it.title}, (${it.duration} minutes)")
-        when(it.`__typename`) {
+        when(it.__typename) {
             "Movie" -> println(" Director: ${it.onMovie?.director}")
             "Audio" -> println(" Filetype: ${it.onAudio?.fileType}")
             else -> println("Result not known")
