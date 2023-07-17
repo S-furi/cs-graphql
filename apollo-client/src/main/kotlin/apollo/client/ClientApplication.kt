@@ -17,11 +17,17 @@ fun main() = runBlocking {
                     .build()
                     .client
 
-    subClient
-            .subscription(CounterSubscription(Optional.present(5)))
-            .toFlow()
-            .onCompletion { println("Communication completed succesfully!") }
-            .collect { println("Received: ${it.data?.counter} from server") }
+    val res = subClient.query(MediaQuery(listOf(1, 2))).execute()
+        .dataOrThrow().medias
+
+    res.forEach {
+        print("Title: ${it.title}, (${it.duration} minutes)")
+        when(it.`__typename`) {
+            "Movie" -> println(" Director: ${it.onMovie?.director}")
+            "Audio" -> println(" Filetype: ${it.onAudio?.fileType}")
+            else -> println("Result not known")
+        }
+    }
 
     subClient.close()
 }

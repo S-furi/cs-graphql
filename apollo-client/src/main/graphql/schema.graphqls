@@ -1,3 +1,13 @@
+type Audio implements Media {
+  duration: Int
+
+  fileType: String
+
+  id: Int!
+
+  title: String
+}
+
 type Book {
   id: Int!
 
@@ -36,6 +46,26 @@ Built-in Int
 """
 scalar Int
 
+interface Media {
+  duration: Int
+
+  id: Int!
+
+  title: String
+}
+
+type Movie implements Media {
+  director: String
+
+  duration: Int
+
+  id: Int!
+
+  studio: String
+
+  title: String
+}
+
 type Mutation {
   """
   adds a string to a list, and returns the list
@@ -68,6 +98,11 @@ type Query {
   Returns data and error fields
   """
   returnDataAndError: String
+
+  """
+  Returns media specifying the ids of them
+  """
+  medias(ids: [Int!]!): [Media!]!
 }
 
 """

@@ -1,0 +1,14 @@
+query Media($ids: [Int!]!) {
+ medias(ids: $ids) {
+     id
+     title
+     duration
+    ... on Audio {
+      fileType
+    }
+    ... on Movie {
+      director
+      studio
+    }
+  }
+}
