@@ -28,23 +28,23 @@ class GraphQLClient(val client: ApolloClient) {
          */
         fun addSubscriptionModule(webSocketEndpoint: String) = apply {
             apolloClientBuilder.subscriptionNetworkTransport(
-                    WebSocketNetworkTransport.Builder()
-                            .serverUrl(webSocketEndpoint)
-                            // specifying the new graphql-ws protocol
-                            .protocol(GraphQLWsProtocol.Factory())
-                            .also { it.okHttpClient(okHttpClient ?: return this) }
-                            .build()
+                WebSocketNetworkTransport.Builder()
+                    .serverUrl(webSocketEndpoint)
+                    // specifying the new graphql-ws protocol
+                    .protocol(GraphQLWsProtocol.Factory())
+                    .also { it.okHttpClient(okHttpClient ?: return this) }
+                    .build()
             )
         }
 
         fun addHttpWithInterceptor() = apply {
             okHttpClient =
-                    OkHttpClient.Builder()
-                            .addInterceptor(
-                                    HttpLoggingInterceptor()
-                                            .setLevel(HttpLoggingInterceptor.Level.BODY)
-                            )
-                            .build()
+                OkHttpClient.Builder()
+                    .addInterceptor(
+                        HttpLoggingInterceptor()
+                            .setLevel(HttpLoggingInterceptor.Level.BODY)
+                        )
+                    .build()
         }
 
         fun build() = GraphQLClient(this)
