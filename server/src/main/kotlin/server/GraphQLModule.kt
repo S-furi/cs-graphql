@@ -24,6 +24,7 @@ import server.schema.queries.DataAndErrorsQuery
 import server.schema.queries.SimpleMutation
 import server.schema.queries.SimpleSubscription
 import server.schema.queries.UniversityQueryService
+import server.schema.queries.MediaQueryService
 
 fun Application.graphQLModule() {
     install(WebSockets) {
@@ -44,6 +45,7 @@ fun Application.graphQLModule() {
                             CourseQueryService(),
                             UniversityQueryService(),
                             DataAndErrorsQuery(),
+                            MediaQueryService(),
                     )
             mutations = listOf(SimpleMutation())
             subscriptions = listOf(SimpleSubscription())
